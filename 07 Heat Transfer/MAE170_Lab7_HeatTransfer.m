@@ -11,7 +11,7 @@ for av = 1:avg
     
     % connect to arduino
     disp('Connecting to Arduino...');
-    s = serialport('COM14', 9600);
+    s = serialport("COMX", 9600);
     pause(3);
 
     % initialize temperature and time vectors, loop counter

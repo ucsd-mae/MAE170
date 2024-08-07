@@ -10,7 +10,7 @@ sampleT=1;%Set sampling time in seconds
 % you can find this through the arduino interface (tools->port)
 % the baud rate must match what you selected in your serial read ...
 % Ardino code
-dataLogger=serialport('COM_NAME',115200); %Connect to arduino, replace COM_NAME with COM port
+dataLogger=serialport("COMX",115200); %Connect to arduino, replace COM_NAME with COM port
 %% Arduino data capture
 newV=0;%intialize variables
 newT=0;%intialize variables

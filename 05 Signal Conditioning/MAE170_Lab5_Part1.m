@@ -25,7 +25,7 @@ v = visadev(list{j,1});
 writeline(v,"OUTP:LOAD INF");
     
 % open object for your "read" arduino
-s_read = serialport('COM#',115200); % insert COM port number
+s_read = serialport("COMX",115200); % insert COM port number
 
 for j=1:length(f_vec) % loop over each frequency to be tested
     

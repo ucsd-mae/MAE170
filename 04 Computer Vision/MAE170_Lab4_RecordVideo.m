@@ -21,7 +21,7 @@ vidname = ['recorded_video_' t '.avi'];
 v_write = VideoWriter(vidname); % define the filename, and setup the video writer
 open(v_write); % open the video writer
  
-s = serialport('COMXX',9600); % open object for your arduino
+s = serialport("COMX",9600); % open object for your arduino
  
 pause(5); % pause for 5 seconds while the serial object is opened
  

@@ -15,9 +15,9 @@ TmShort=1; % move time short [s]
 %% setup recording matrix, gcode initial properties, and open serial objects
 
 % [EDIT THESE COM PORT VALUES]
-s_speaker = serialport('COMX',115200); % Serialport connection
+s_speaker = serialport("COMX",115200); % Serialport connection
 % create serial object for speaker Arduino
-s_move = serialport('COMX',115200);
+s_move = serialport("COMX",115200);
 % create serial object for Rambo Arduino
 
 disp('Connecting to Arduino & RAMBo...')
@@ -38,8 +38,14 @@ y=(0:pointsy-1)*move; % create the y movement vector [mm]
 buffer_size=600; % buffer size
 
 % set up Oscilloscope
-% [EDIT THE INSTRUMENT ID BELOW]
-oscObj = visadev('USB0::0x1AB1::0x0588::DS1ET213707925::INSTR');
+list = visadevlist;
+for i=1:height(list)
+    c = char(list{i,1});
+    if c(1:4) == 'USB0'
+        j = i;
+    end
+end
+oscObj = visadev(list{j,1});
 
 % [EDIT THE FOLLOWING PARAMETERS BASED ON THE LAB PROCEDURE]
 verticalscale1 = .050; % channel 1 vertical scale [V]
