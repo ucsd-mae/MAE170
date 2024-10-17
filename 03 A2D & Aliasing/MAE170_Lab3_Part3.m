@@ -49,7 +49,7 @@ len = length(data);
 timebase = str2double(writeread(oscObj,':TIMebase:SCALe?')); % get timebase
 verticalscale = str2double(writeread(oscObj,':CHANnel1:SCALe?')); % get vertical scale
 verticaloffset = str2double(writeread(oscObj,':CHANnel1:OFFSet?')); % get vertical offset
-wave=data(12:len-1)*verticalscale/25+verticaloffset;
+wave=(125-data(12:len-1))*verticalscale/25+verticaloffset;
  
 T=timebase*12; % calculate total time
 dt=T/length(wave); % calculate time step
