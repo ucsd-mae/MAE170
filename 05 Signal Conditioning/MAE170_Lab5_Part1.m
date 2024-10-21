@@ -79,8 +79,8 @@ for j=1:length(f_vec) % loop over each frequency to be tested
         ind=find(out==';',1); % find index of semi-colon
         a_ref=str2double(out(1:ind_ref-1)); % get amplitude of output signal
         % get amplitude of reference signal
-        a=str2double(out(ind_ref+2:ind-1)); 
-        t=str2double(out(ind+2:end))/1E6; % get time
+        a=str2double(strtrim(out(ind_ref+1:ind-1))); 
+        t=str2double(strtrim(out(ind+1:end)))/1E6; % get time
         % condition to take sample at set sampling rate
         if (t-timer)>dt_set 
             time(i) = t; % establishing time steps for sampling frequency
