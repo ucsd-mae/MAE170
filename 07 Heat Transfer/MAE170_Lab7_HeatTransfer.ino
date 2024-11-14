@@ -1,4 +1,4 @@
-/*  filename = MAE170-Lab6-Spring2023.ino
+/*  filename = MAE170_Lab7_HeatTransfer.ino
     MAE170 convective cooling heat transfer experiment
     SWR 18 Feb 2022) - 11 Aug 2022
     MR11 bulb, 12V, 2.8A, 35W
