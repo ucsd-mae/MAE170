@@ -48,7 +48,7 @@ for j=1:length(f_vec) % loop over each frequency to be tested
     % writeline(s_gen,'%s',int2str(f_vec(j))); % write the signal frequency
     % pause(2);
   
-    writeline(v,"APPLy:SIN " + int2str(f_vec(j)) + ",1,1.25"); % sending over a wave
+    writeline(v,"APPLy:SIN " + int2str(f_vec(j)) + ",2,1.25"); % sending over a wave
 
         
     flag=0; %set flag for timer
