@@ -104,7 +104,7 @@ for i=1:pointsx
                 pause(1); % pause additional second for the first datapoint
                           % this prevents getting a bad first set of signals
             end
-            % write the signal frequency % play 10 cycle, 5 kHz tone
+            % write the signal frequency % play 5 cycle, 5 kHz tone
             writeline(oscObj,':wav:data? CHAN1'); % get data from ch1 oscilloscope
             data_ref = read(oscObj, buffer_size, 'uint8');
 
