@@ -155,6 +155,8 @@ for i=1:pointsx
     end
 end
 
+save(['acousticscan' num2str(floor(now*1E3)) '.mat']); % save data
+
 % pauses code execution until a button is pressed so that students
 % can measure the final position 
 disp('Measure the final X & Y position of the microphone, then press any button to finish.')
@@ -169,5 +171,3 @@ fclose(oscObj);
 delete(oscObj);
 clear s_move;
 clear s_speaker; % close the serial connection for speaker
-
-save(['acousticscan' num2str(floor(now*1E3)) '.mat']); % save data
