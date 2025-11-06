@@ -101,9 +101,15 @@ for i=1:pointsx
             pause(.1*rand); % pause for random time from 0 -> .1 s
             writeline(s_speaker,int2str(f_tone));
             pause(TmShort);
+            if k==1 && i==1 && q==1
+                pause(1); % pause additional second for the first datapoint
+                          % this prevents getting a bad first set of signals
+            end
             % write the signal frequency % play 10 cycle, 5 kHz tone
             writeline(oscObj,':wav:data? CHAN1'); % get data from ch1 oscilloscope
             data_ref = read(oscObj, buffer_size, 'uint8');
+
+            pause(0.01); % brief pause in between write/reads to ensure both channels update
             
             writeline(oscObj,':wav:data? CHAN2'); % get data from ch2 oscilloscope
             data_sig = read(oscObj, buffer_size, 'uint8');
