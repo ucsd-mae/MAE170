@@ -1,6 +1,6 @@
-clc;
-clear;
 close all;
+clear;
+clc;
  
 %% Parameters to set
 T = 2; % Total sampling time in seconds

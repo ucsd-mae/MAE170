@@ -1,8 +1,7 @@
 %% Motor Control & Video Recording Script
 close all;
-clear all;
+clear;
 clc;
-instrreset;
 %%
 workingDir = pwd; % set the working directory to the current directory
 frames = 200; % set the number of frames to record

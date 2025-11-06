@@ -1,6 +1,6 @@
-clc;
-clear;
 close all;
+clear;
+clc;
 
 %%
 maxTemp = 35; % max temperature to achieve, in Celsius

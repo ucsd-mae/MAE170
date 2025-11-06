@@ -1,8 +1,7 @@
 %%
-clc;
-clear;
 close all;
-instrreset;
+clear;
+clc;
 warning('off','all');
 %% parameters to set
 f_tone = 5E3; % frequency of tone to be generated [Hz]

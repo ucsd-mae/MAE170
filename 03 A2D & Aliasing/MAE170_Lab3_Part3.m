@@ -1,5 +1,5 @@
 close all; %close all open windows
-clear all; %clear all variables
+clear; %clear all variables
 clc; %clear output screen
  
 %% Parameters to set
