@@ -1,6 +1,8 @@
 close all; %close all open windows
 clear; %clear all variables
 clc; %clear output screen
+s = serialportfind; % Find all current serialport connections
+delete(s); % Delete all found connections
  
 %% Parameters to set
 sampleT=1;%Set sampling time in seconds
@@ -55,6 +57,10 @@ T=timebase*12; % calculate total time
 dt=T/length(wave); % calculate time step
 time=[0:dt:T-dt]; % setup time vector
 
+filename = sprintf('FREQUENCYHERE_lab3_part3_%s',datetime('now','Format',"yyyy-MM-dd-HH-mm-ss"));
+save([filename, '.mat']); % saves the whole workspace
+
 clear oscObj; % clear oscilloscope object
+delete datalogger; % close serial connection to arduino
  
 end
