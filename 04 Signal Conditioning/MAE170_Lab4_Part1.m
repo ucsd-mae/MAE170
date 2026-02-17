@@ -189,7 +189,7 @@ filename = sprintf('MAE170_lab4_part1_%s',datetime('now','Format',"yyyy-MM-dd-HH
 % Be sure to change filenames if you don’t want to overwrite your data!
 save([filename, '.mat'], 'f_vec','transfer_vec'); 
 % save frequency and gain to mat file
-csvwrite([filename, '.csv'], datetime('now','Format',"yyyy-MM-dd-HH-mm-ss")),[f_vec',transfer_vec]);
+csvwrite([filename, '.csv'], ['f_vec','transfer_vec']);
 % save frequency and gain to csv file
 saveas(gcf,filename);
 % save figure
