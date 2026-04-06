@@ -155,7 +155,8 @@ for i=1:pointsx
     end
 end
 
-save(['acousticscan' num2str(floor(now*1E3)) '.mat']); % save data
+filename = sprintf('acousticscan_lab6_%s',datetime('now','Format',"yyyy-MM-dd-HH-mm-ss"));
+save([filename, '.mat']); % save data
 
 % pauses code execution until a button is pressed so that students
 % can measure the final position 
@@ -169,5 +170,5 @@ pause(TmLong);
 %% save the data and close objects
 fclose(oscObj);
 delete(oscObj);
-clear s_move;
-clear s_speaker; % close the serial connection for speaker
+delete s_move; % close serial connections
+delete s_speaker; % close the serial connection for speaker

@@ -64,9 +64,8 @@ for av = 1:avg
     
     % save data for this iteration
     disp('Cycle Complete! Saving Data...')
-    n = convertTo(datetime("now"), 'posixtime');
-    save(['lab6' 'Average' num2str(av) '-' ...
-        num2str(floor(n)) '.mat']);
+    filename = sprintf('lab7_%s_trial_%i', datetime('now','Format',"yyyy-MM-dd-HH-mm-ss"),av);
+    save([filename, '.mat']); % save whole workspace
     
     clear tempPlateC tempAmbC time s;
     close;

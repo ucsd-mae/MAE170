@@ -19,6 +19,14 @@ set(gca,'FontSize',22,'LineWidth',2);
 xlabel('frequency [Hz]')
 ylabel('|FT|');
 
+%% Save and wrapup
+filename = sprintf('lab3_fft_%s',datetime('now','Format',"yyyy-MM-dd-HH-mm-ss"));
+save([filename, '.mat'], 'time','voltage'); % save time and voltage to mat file
+csvwrite([filename, '.csv'],[time, voltage]); % save time and voltage to csv file
+saveas(gcf,filename); % save figure
+
+
+%% FFT function
 function [frequencyVar, amplitudeVar] = MAE170fft(tVar, yVar)
 reps=length(tVar); % obtain number of samples
 fs=1/mean(diff(tVar)); % calculate mean sampling rate

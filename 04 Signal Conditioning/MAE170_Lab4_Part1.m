@@ -7,7 +7,7 @@ T = 2; % Total sampling time in seconds
 fs = 1000; % sampling frequency target in Hz
 cutFreq = 1; % insert your calculated cutoff frequency here
 f_min=1; % minimum frequency to be characterized in Hz
-f_max=2*cutFreq; % maximmum frequency to be characterized in Hz
+f_max=2*cutFreq; % maximum frequency to be characterized in Hz
 f_step=1; % frequency step in Hz
 %%
  
@@ -171,7 +171,7 @@ for j=1:length(f_vec) % loop over each frequency to be tested
     % plot the transfer function
     subplot(224)
     plot(f_vec,transfer_vec,'r-o','LineWidth',2,'MarkerSize',4);
-xlabel('frequency (Hz)'); % x-axis label name
+    xlabel('frequency (Hz)'); % x-axis label name
     ylabel('|FT|_{max}/|FT|_{max,ref}'); % y-axis label name
     title('Transfer Function'); % set title as sampling rate
     xlim([f_min f_max]);
@@ -185,11 +185,14 @@ xlabel('frequency (Hz)'); % x-axis label name
     drawnow;
     
 end
-
+filename = sprintf('MAE170_lab4_part1_%s',datetime('now','Format',"yyyy-MM-dd-HH-mm-ss"));
 % Be sure to change filenames if you don’t want to overwrite your data!
-save('MAE170_lab4','f_vec','transfer_vec'); 
+save([filename, '.mat'], 'f_vec','transfer_vec'); 
 % save frequency and gain to mat file
-csvwrite('MAE170_lab4.csv',[f_vec',transfer_vec]);
+csvwrite([filename, '.csv'], ['f_vec','transfer_vec']);
 % save frequency and gain to csv file
-saveas(gcf,'MAE170_lab4');
+saveas(gcf,filename);
 % save figure
+
+%% cleanup
+delete(s_read) % close serial connection by deleting object
