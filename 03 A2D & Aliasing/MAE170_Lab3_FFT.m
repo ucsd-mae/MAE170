@@ -11,7 +11,7 @@ set(gca,'FontSize',22,'LineWidth',2);
 xlabel('time (s)')
 ylabel('Amplitude (a.u.)');
 
-[freq, amp]=MAE170fft(time, signal);
+[freq, amp]=MAE170fft(time, signal); % 
 
 figure(2)
 plot(freq, amp,'-ob','LineWidth',2,'MarkerSize',4);
@@ -21,8 +21,7 @@ ylabel('|FT|');
 
 %% Save and wrapup
 filename = sprintf('lab3_fft_%s',datetime('now','Format',"yyyy-MM-dd-HH-mm-ss"));
-save([filename, '.mat'], 'time','voltage'); % save time and voltage to mat file
-csvwrite([filename, '.csv'],[time, voltage]); % save time and voltage to csv file
+save([filename, '.mat']); % save time and voltage to mat file
 saveas(gcf,filename); % save figure
 
 
