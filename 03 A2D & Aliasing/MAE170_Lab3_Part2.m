@@ -1,9 +1,3 @@
-close all; %close all open windows
-clear all; %clear all variables
-clc; %clear output screen
-s = serialportfind; % Find all current serialport connections
-delete(s); % Delete all found connections
- 
 %% Parameters to set
 T = 5; % Total sampling time in seconds
 fs = 500; % Hz
@@ -52,6 +46,7 @@ while toc < (T+1)
     xlabel('time (s)'); % x-axis label name
     ylabel('voltage (V)'); % y-axis label name
 
+    xlim([0 T]); % bound x to sample time
     ylim([Vmin, Vmax]); % set y plot range
     title('sampling data...'); % set title as sampling rate
     
@@ -77,13 +72,11 @@ while toc < (T+1)
                 flag=1;
             end
         end
-        plothandle.XData = time(1:i-1); %update plot data with new time vals
-        plothandle.YData = voltage(1:i-1); % update plot data with new volt vals
+        plothandle.XData = time(2:i-1); %update plot data with new time vals
+        plothandle.YData = voltage(2:i-1); % update plot data with new volt vals
         drawnow limitrate; % draw the figure now- live update plot
     end
-    flush(s);
-    delete(s); % close serial object by deleting
-    delete(serialportfind); % belt and suspenders
+
     
     reps=i-1;
     time = time(1:reps); % setup a vector for time
@@ -98,4 +91,13 @@ while toc < (T+1)
     save([filename, '.mat'], 'time','voltage'); % save time and voltage to mat file
     csvwrite([filename, '.csv'],[time, voltage]); % save time and voltage to csv file
     saveas(gcf,filename); % save figure
+
+
+    %% close serial object
+    s.setDTR(false); % this line allows matlab to break connection without waiting for arduino
+                          % to respond in a way the arduino isn't looking
+                          % for0.0.
+    clear s; % delete dataLogger variable so you can use the com port again
+    disp('Part 2 Capture complete')
+
 end
