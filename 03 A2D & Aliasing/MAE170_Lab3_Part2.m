@@ -85,6 +85,12 @@ while toc < (T+1)
     fs_avg=1/dt_avg; % calculate the average sampling frequency from dt_avg
     title(['sampled data: f_{s,average}=' num2str(round(fs_avg)) ' Hz']); % set title as sampling rate
     drawnow;
+
+    %% close serial object
+    s.setDTR(false); % this line allows matlab to break connection without waiting for arduino
+                          % to respond in a way the arduino isn't looking
+                          % for0.0.
+    clear s; % delete dataLogger variable so you can use the com port again
    
     %% Save and wrapup
     filename = sprintf('lab3_part2_%s',datetime('now','Format',"yyyy-MM-dd-HH-mm-ss"));
@@ -93,11 +99,7 @@ while toc < (T+1)
     saveas(gcf,filename); % save figure
 
 
-    %% close serial object
-    s.setDTR(false); % this line allows matlab to break connection without waiting for arduino
-                          % to respond in a way the arduino isn't looking
-                          % for0.0.
-    clear s; % delete dataLogger variable so you can use the com port again
+
     disp('Part 2 Capture complete')
 
 end

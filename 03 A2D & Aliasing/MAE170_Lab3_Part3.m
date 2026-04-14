@@ -30,16 +30,17 @@ while newT<sampleT
     vArduino = [vArduino newV];
     tArduino = [tArduino newT];
 end
-
-%%
-filename = sprintf('FREQUENCYHERE_lab3_part3_%s',datetime('now','Format',"yyyy-MM-dd-HH-mm-ss"));
-save([filename, '.mat']); % saves the whole workspace
-
+%% Disconnect arduino
 dataLogger.setDTR(false); % this line allows matlab to break connection without waiting for arduino
                           % to respond in a way the arduino isn't looking
                           % for0.0.
 clear dataLogger; % delete dataLogger variable so you can use the com port again
 disp('Part 3 Capture complete')
+%% Save data
+filename = sprintf('FREQUENCYHERE_lab3_part3_%s',datetime('now','Format',"yyyy-MM-dd-HH-mm-ss"));
+save([filename, '.mat']); % saves the whole workspace
+
+
 
 %% may need to use tmtool to scan for oscilloscope resource
 function [wave,time] = oscread()
