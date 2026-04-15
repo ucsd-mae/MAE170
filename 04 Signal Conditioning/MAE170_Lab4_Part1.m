@@ -185,6 +185,12 @@ for j=1:length(f_vec) % loop over each frequency to be tested
     drawnow;
     
 end
+
+%% cleanup
+s_read.setDTR(false);
+clear s_read; % close serial connection by deleting object
+
+%% Save data
 filename = sprintf('MAE170_lab4_part1_%s',datetime('now','Format',"yyyy-MM-dd-HH-mm-ss"));
 % Be sure to change filenames if you don’t want to overwrite your data!
 save([filename, '.mat'], 'f_vec','transfer_vec'); 
@@ -194,5 +200,4 @@ csvwrite([filename, '.csv'], ['f_vec','transfer_vec']);
 saveas(gcf,filename);
 % save figure
 
-%% cleanup
-delete(s_read) % close serial connection by deleting object
+
