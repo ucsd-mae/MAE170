@@ -155,13 +155,17 @@ for i=1:pointsx
     end
 end
 
+allVars = who;
+excludeVars = {'s_move', 's_speaker', 'oscObj', 'list'};
+varsToSave = setdiff(allVars, excludeVars);
 filename = sprintf('acousticscan_lab6_%s',datetime('now','Format',"yyyy-MM-dd-HH-mm-ss"));
-save([filename, '.mat']); % save data
+save([filename, '.mat'], varsToSave{:}); % save data
 
 % pauses code execution until a button is pressed so that students
 % can measure the final position 
 disp('Measure the final X & Y position of the microphone, then press any button to finish.')
-w = waitforbuttonpress;
+msgfig = msgbox('Measure the final X & Y position of the microphone, then press OK button to finish.','Measure Final Position','modal');
+uiwait(msgfig)
 
 % move back to beginning
 writeline(s_move,'G0 X0 Y0'); % tell Rambo Arduino to move back to origin
