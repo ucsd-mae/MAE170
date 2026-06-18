@@ -1,1 +1,7 @@
 *.bak
+*.csv
+*.asv
+*.mat
+*.xlsx
+*.fig
+*.DS_Store
