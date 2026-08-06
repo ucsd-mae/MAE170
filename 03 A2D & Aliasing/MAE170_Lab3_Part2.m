@@ -1,17 +1,17 @@
 %% Parameters to set
 T = 5; % Total sampling time in seconds
-fs = 500; % Hz
+fs = 10000; % Hz
 Vmin = -0.01; % minimum Y value to graph
 Vmax = 5.1; % maximum Y value to graph
  
 % create the serial object 's'
 % you must replace the port name with the port on your machine
-% you can find this through the arduino interface (tools->port)
+% you can find this through the pico interface (tools->port)
 % the baud rate must match what you selected in your serial read ...
-% Ardino code
+% pico code
 % port_num = serialportlist; % Creates a list of active serial ports
 
-s = serialport("COMX",115200); % Replace COMX with your Arduino's COM port
+s = serialport("COMX",115200); % Replace COMX with your pico's COM port
 flush(s); % Clear buffers on serial object
  
 %% Main code
@@ -65,7 +65,7 @@ while toc < (T+1)
         t=str2double(out(ind+2:end))/1E6;
         if (t-timer)>dt_set % condition to take sample at set sampling rate
             time(i) = t - time(1); % establishing time steps for sampling frequency
-            voltage(i)=a * 5/1023; % convert to full scale voltage
+            voltage(i)=a * 5/(2^16 - 1); % convert to full scale voltage
             timer=t;
             i=i+1;
             if t>(T+time(1)) % condition to end loop when end time is reached
@@ -87,8 +87,8 @@ while toc < (T+1)
     drawnow;
 
     %% close serial object
-    s.setDTR(false); % this line allows matlab to break connection without waiting for arduino
-                          % to respond in a way the arduino isn't looking
+    s.setDTR(false); % this line allows matlab to break connection without waiting for pico
+                          % to respond in a way the pico isn't looking
                           % for0.0.
     clear s; % delete dataLogger variable so you can use the com port again
    

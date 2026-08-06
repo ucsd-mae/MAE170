@@ -3,10 +3,9 @@ sampleT=1;%Set sampling time in seconds
  
 % create the serial object 'dataLogger'
 % you must replace the port name with the port on your machine
-% you can find this through the arduino interface (tools->port)
-% the baud rate must match what you selected in your serial read ...
-% Ardino code
-dataLogger=serialport("COMX",115200); %Connect to arduino, replace COM_NAME with COM port
+% you can find this through the pico interface (tools->port)
+
+dataLogger=serialport("COMX",115200); %Connect to pico, replace COM_NAME with COM port
 
 dataLogger.flush();
 for i=1:10
@@ -15,25 +14,25 @@ end
 %% Read oscilloscope data
 [vOscope,tOscope]=oscread();
    
-%% Arduino data capture
+%% Pico data capture
 newV=0;%intialize variables
 newT=0;%intialize variables
 tempText=readline(dataLogger);
 startV = str2double(extractBefore(tempText,','));
 startT = str2double(strtrim(extractAfter(tempText,',')));
-vArduino = [startV*5.0/1023];
-tArduino = [0];
+vPico = [startV*5.0/1023];
+tPico = [0];
 while newT<sampleT
     tempText=readline(dataLogger);
     newV=str2double(extractBefore(tempText,','))*5.0/1023;
     newT=(str2double(strtrim(extractAfter(tempText,',')))-startT)/1E6;
-    vArduino = [vArduino newV];
-    tArduino = [tArduino newT];
+    vPico = [vPico newV];
+    tPico = [tPico newT];
 end
-%% Disconnect arduino
-dataLogger.setDTR(false); % this line allows matlab to break connection without waiting for arduino
-                          % to respond in a way the arduino isn't looking
-                          % for0.0.
+%% Disconnect pico
+dataLogger.setDTR(false); % this line allows matlab to break connection without waiting for pico
+                          % to respond in a way the pico  isn't looking
+                          % for.
 clear dataLogger; % delete dataLogger variable so you can use the com port again
 disp('Part 3 Capture complete')
 %% Save data
