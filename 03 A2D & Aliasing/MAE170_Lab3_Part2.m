@@ -52,7 +52,7 @@ while toc < (T+1)
     hold on;
     drawnow;
 
-        % --- fast acquisition loop ---
+    % --- fast acquisition loop ---
     % Instead of reading one line at a time (readline() is too slow to
     % keep up with the Pico on its own), we grab however many bytes are
     % sitting in the buffer RIGHT NOW in a single read() call, then
