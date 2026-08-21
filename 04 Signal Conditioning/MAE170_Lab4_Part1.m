@@ -24,7 +24,7 @@ end
 v = visadev(list{j,1});
 writeline(v,"OUTP:LOAD INF");
     
-% open object for your "read" arduino
+% open object for your "read" Pico
 s_read = serialport("COMX",115200); % insert COM port number
 
 for j=1:length(f_vec) % loop over each frequency to be tested
@@ -35,18 +35,20 @@ for j=1:length(f_vec) % loop over each frequency to be tested
     % the baud rate must match what you selected in your serial read ...
     % Ardino code
     
-    % the first serial object, s_gen, corresponds to the Arduino acting ...
+    % the first serial object, s_gen, corresponds to the Pico acting ...
     % as your signal generator
-    % the second serial object, s_read, corresponds to the Arduino ...
+    % the second serial object, s_read, corresponds to the Pico ...
     % acting as your oscilloscope
     
-    % THIS IS FOR EXTRA CREDIT
+    % -------------------------------------
+    % THIS SECTION IS FOR EXTRA CREDIT - uncomment for extra credit section
     % open object for your signal generator arduino
     % this segment sets the frequency of the generated signal
     % s_gen = serialport('COM11',115200); % opens serial connect at specified baud rate
     % pause(5); % pause for 5 seconds while the serial object is opened
     % writeline(s_gen,'%s',int2str(f_vec(j))); % write the signal frequency
     % pause(2);
+    % -------------------------------------
   
     writeline(v,"APPLy:SIN " + int2str(f_vec(j)) + ",2,1.25"); % sending over a wave
 
@@ -137,7 +139,7 @@ for j=1:length(f_vec) % loop over each frequency to be tested
     % calculate Power spectral density (PSD) for the output signal
     [PSD,f_psd] = periodogram(voltage-mean(voltage),rectwin(reps),...
         reps,fs_avg,'onesided');
-    FT=sqrt(PSD); % convert Arduino PSD to Fourier magnitude
+    FT=sqrt(PSD); % convert PSD from Pico to Fourier magnitude
     
     [FT_max,ind_max]=max(FT); % find the maximum of the output signal FT
     
@@ -145,7 +147,7 @@ for j=1:length(f_vec) % loop over each frequency to be tested
     [PSD_ref,f_psd] = periodogram(...
         voltage_ref-mean(voltage_ref),rectwin(reps),...
         reps,fs_avg,'onesided');
-    FT_ref=sqrt(PSD_ref); % convert Arduino PSD to Fourier magnitude
+    FT_ref=sqrt(PSD_ref); % conver PSD from Pico to Fourier magnitude
     
     % find the maximum of the reference signal FT
     [FT_max_ref,ind_max_ref]=max(FT_ref);

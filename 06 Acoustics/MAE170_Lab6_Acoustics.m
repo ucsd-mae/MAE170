@@ -15,11 +15,11 @@ TmShort=1; % move time short [s]
 
 % [EDIT THESE COM PORT VALUES]
 s_speaker = serialport("COMX",115200); % Serialport connection
-% create serial object for speaker Arduino
+% create serial object for speaker control via Pi Pico
 s_move = serialport("COMX",115200);
 % create serial object for Rambo Arduino
 
-disp('Connecting to Arduino & RAMBo...')
+disp('Connecting to Pico & RAMBo...')
 pause(3); %initial pause for Rambo
 disp('Connected!')
 
