@@ -65,7 +65,7 @@ while toc < (T+1)
         t=str2double(out(ind+2:end))/1E6;
         if (t-timer)>dt_set % condition to take sample at set sampling rate
             time(i) = t - time(1); % establishing time steps for sampling frequency
-            voltage(i)=a * 5/(2^16 - 1); % convert to full scale voltage
+            voltage(i)=a * 3.3/(2^10 - 1); % convert to full scale voltage
             timer=t;
             i=i+1;
             if t>(T+time(1)) % condition to end loop when end time is reached
