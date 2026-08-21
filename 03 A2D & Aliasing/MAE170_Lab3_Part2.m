@@ -28,12 +28,7 @@ while toc < (T+1)
     time=zeros(L,1); % initialize time vector
     voltage=zeros(L,1); % initialize amplitude vector
     waittime=1; %set initial wait time before sampling in seconds
-    t=0; % initialize time variable
-    ind=0; % initialize index variable
-    a=0; % initialize amplitude variable
-    dump=''; % initialize text dump variable
-    out=''; % initialize serial output string variable
-    tic; % start timer
+    t0 = [];
     
     while toc<waittime % read and dump serial data until wait time is reached
         pause(waittime);
@@ -57,7 +52,15 @@ while toc < (T+1)
     hold on;
     drawnow;
 
-    
+        % --- fast acquisition loop ---
+    % Instead of reading one line at a time (readline() is too slow to
+    % keep up with the Pico on its own), we grab however many bytes are
+    % sitting in the buffer RIGHT NOW in a single read() call, then
+    % parse every complete line in that chunk in one sscanf() call.
+    leftover = '';       % holds any partial (incomplete) line between reads
+    plot_dt = 0.05;        % only redraw the plot ~20 times/sec (not every sample)
+    last_plot = 0;
+    tic; % re-start timer to use for plot throttling
     while flag == 0
         nbytes = s.NumBytesAvailable;
         if nbytes == 0
