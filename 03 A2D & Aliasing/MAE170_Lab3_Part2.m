@@ -36,7 +36,8 @@ while toc < (T+1)
     tic; % start timer
     
     while toc<waittime % read and dump serial data until wait time is reached
-        dump = readline(s);
+        pause(waittime);
+        flush(s);
     end
 
     %% Create plot
@@ -57,24 +58,54 @@ while toc < (T+1)
     drawnow;
 
     
-    while flag==0
-        out = readline(s);
-        out = char(out);
-        ind=find(out==',',1);
-        a=str2double(out(1:ind-1));
-        t=str2double(out(ind+2:end))/1E6;
-        if (t-timer)>dt_set % condition to take sample at set sampling rate
-            time(i) = t - time(1); % establishing time steps for sampling frequency
-            voltage(i)=a * 3.3/(2^10 - 1); % convert to full scale voltage
-            timer=t;
-            i=i+1;
-            if t>(T+time(1)) % condition to end loop when end time is reached
-                flag=1;
+    while flag == 0
+        nbytes = s.NumBytesAvailable;
+        if nbytes == 0
+            continue % nothing new yet, check again
+        end
+ 
+        raw = [leftover, read(s, nbytes, "char")]; % char array of everything available
+ 
+        lastNL = find(raw == newline, 1, 'last');
+        if isempty(lastNL)
+            leftover = raw; % no complete line yet, keep waiting for more
+            continue
+        end
+        leftover = raw(lastNL+1:end);   % save any partial trailing line for next pass
+        chunk = raw(1:lastNL);           % only complete lines
+ 
+        % parse every "adc, time_us" line in the chunk at once
+        vals = sscanf(chunk, '%f, %f');
+        vals = vals(1:2*floor(numel(vals)/2)); % drop a stray unpaired value, if any
+        a_all = vals(1:2:end);
+        t_all = vals(2:2:end) / 1E6; % convert microseconds to seconds
+ 
+        if isempty(t0)
+            t0 = t_all(1);
+        end
+ 
+        % keep only samples spaced by at least dt_set 
+        for k = 1:numel(t_all)
+            if (t_all(k) - timer) > dt_set
+                time(i) = t_all(k) - t0; % time relative to first sample
+                voltage(i) = a_all(k) * 3.3/(2^10 - 1); % convert to full scale voltage
+                timer = t_all(k);
+                i = i + 1;
+ 
+                if t_all(k) > (T + t0) % condition to end loop when end time is reached
+                    flag = 1;
+                    break
+                end
             end
         end
-        plothandle.XData = time(2:i-1); %update plot data with new time vals
-        plothandle.YData = voltage(2:i-1); % update plot data with new volt vals
-        drawnow limitrate; % draw the figure now- live update plot
+ 
+        % update the plot, but only every plot_dt seconds - not every sample
+        if (toc - last_plot) > plot_dt || flag == 1
+            plothandle.XData = time(2:max(i-1,2));
+            plothandle.YData = voltage(2:max(i-1,2));
+            drawnow limitrate; % draw the figure now- live update plot
+            last_plot = toc;
+        end
     end
 
     
