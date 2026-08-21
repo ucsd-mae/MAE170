@@ -18,7 +18,7 @@ flush(s); % Clear buffers on serial object
 figure(01); % setup figure 01
 
 tic;
-while toc < (T+1)
+% while toc < (T+1)
     
     flag=0; %set flag for timer
     i=1; % set sample counter
@@ -78,7 +78,7 @@ while toc < (T+1)
         chunk = raw(1:lastNL);           % only complete lines
  
         % parse every "adc, time_us" line in the chunk at once
-        vals = sscanf(chunk, '%f, %f');
+        vals = sscanf(chunk, '%f, %f\n');
         vals = vals(1:2*floor(numel(vals)/2)); % drop a stray unpaired value, if any
         a_all = vals(1:2:end);
         t_all = vals(2:2:end) / 1E6; % convert microseconds to seconds
@@ -115,7 +115,7 @@ while toc < (T+1)
     reps=i-1;
     time = time(1:reps); % setup a vector for time
     voltage = voltage(1:reps); % match length of voltage vector
-    dt_avg = time(end)/reps; % find the average time interval between samples
+    dt_avg = mean(diff(time)); % find the average time interval between samples
     fs_avg=1/dt_avg; % calculate the average sampling frequency from dt_avg
     title(['sampled data: f_{s,average}=' num2str(round(fs_avg)) ' Hz']); % set title as sampling rate
     drawnow;
@@ -136,4 +136,4 @@ while toc < (T+1)
 
     disp('Part 2 Capture complete')
 
-end
+% end
