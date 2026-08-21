@@ -2,8 +2,8 @@ Fs = 400; % dummy sampling rate of 400 Hz
 time = (0:1/Fs:1); % Time vector for 1 second at sampling frequency Fs
 signal = sin(2*pi*30*time); % Sin wave signal at 30 Hz
 
-% Comment out lines above and set time equal to tArduino and signal equal
-% to vArduino
+% Comment out lines above and set time equal to tPico and signal equal
+% to vPico
 
 figure(1);
 plot(time, signal,'-ob','LineWidth',2,'MarkerSize',4);
