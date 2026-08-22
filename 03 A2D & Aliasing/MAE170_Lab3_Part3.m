@@ -14,10 +14,12 @@ dataLogger.flush();
 [vOscope,tOscope]=oscread();
    
 %% Pico data capture
-i=0;
-flag=0;
+i=1; % keep track of number of samples ingested
+flag=0; % flag when enough samples have been ingested
+t0 = []; % placeholder for initial time value to reference time to
+leftover = ''; % placeholder for any uningested string that may develop
 
-L=T*2e4*2; % oversized vector length 
+L=sampleT*2e4*2; % oversized vector length 
 tPico=zeros(L,1); % initialize time vector
 vPico=zeros(L,1); % initialize amplitude vector
 
@@ -34,7 +36,7 @@ vPico=zeros(L,1); % initialize amplitude vector
             continue % nothing new yet, check again
         end
  
-        raw = [leftover, read(datalogger, nbytes, "char")]; % char array of everything available
+        raw = [leftover, read(dataLogger, nbytes, "char")]; % char array of everything available
  
         lastNL = find(raw == newline, 1, 'last');
         if isempty(lastNL)
