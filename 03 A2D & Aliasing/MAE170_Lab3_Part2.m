@@ -111,7 +111,7 @@ tic;
         end
     end
 
-    
+    % trim oversized vectors and analyze
     reps=i-1;
     time = time(1:reps); % setup a vector for time
     voltage = voltage(1:reps); % match length of voltage vector

@@ -7,28 +7,73 @@ sampleT=1;%Set sampling time in seconds
 
 dataLogger=serialport("COMX",115200); %Connect to pico, replace COM_NAME with COM port
 
+pause(1);
 dataLogger.flush();
-for i=1:10
-    readline(dataLogger);
-end
+
 %% Read oscilloscope data
 [vOscope,tOscope]=oscread();
    
 %% Pico data capture
-newV=0;%intialize variables
-newT=0;%intialize variables
-tempText=readline(dataLogger);
-startV = str2double(extractBefore(tempText,','));
-startT = str2double(strtrim(extractAfter(tempText,',')));
-vPico = [startV*5.0/1023];
-tPico = [0];
-while newT<sampleT
-    tempText=readline(dataLogger);
-    newV=str2double(extractBefore(tempText,','))*5.0/1023;
-    newT=(str2double(strtrim(extractAfter(tempText,',')))-startT)/1E6;
-    vPico = [vPico newV];
-    tPico = [tPico newT];
-end
+i=0;
+flag=0;
+
+L=T*2e4*2; % oversized vector length 
+tPico=zeros(L,1); % initialize time vector
+vPico=zeros(L,1); % initialize amplitude vector
+
+    % --- fast acquisition loop ---
+    % Instead of reading one line at a time (readline() is too slow to
+    % keep up with the Pico on its own), we grab however many bytes are
+    % sitting in the buffer RIGHT NOW in a single read() call, then
+    % parse every complete line in that chunk in one sscanf() call.
+    leftover = '';       % holds any partial (incomplete) line between reads
+
+    while flag == 0
+        nbytes = dataLogger.NumBytesAvailable;
+        if nbytes == 0
+            continue % nothing new yet, check again
+        end
+ 
+        raw = [leftover, read(datalogger, nbytes, "char")]; % char array of everything available
+ 
+        lastNL = find(raw == newline, 1, 'last');
+        if isempty(lastNL)
+            leftover = raw; % no complete line yet, keep waiting for more
+            continue
+        end
+        leftover = raw(lastNL+1:end);   % save any partial trailing line for next pass
+        chunk = raw(1:lastNL);           % only complete lines
+ 
+        % parse every "adc, time_us" line in the chunk at once
+        vals = sscanf(chunk, '%f, %f\n');
+        vals = vals(1:2*floor(numel(vals)/2)); % drop a stray unpaired value, if any
+        a_all = vals(1:2:end);
+        t_all = vals(2:2:end) / 1E6; % convert microseconds to seconds
+ 
+        if isempty(t0)
+            t0 = t_all(1);
+        end
+ 
+ 
+        for k = 1:numel(t_all)
+            tPico(i) = t_all(k) - t0; % time relative to first sample
+            vPico(i) = a_all(k) * 3.3/(2^10 - 1); % convert to full scale voltage
+            timer = t_all(k);
+            i = i + 1;
+
+            if t_all(k) > (sampleT + t0) % condition to end loop when end time is reached
+                flag = 1;
+                break
+            end
+        end
+    end
+
+    % trim oversized vectors
+    tPico = tPico(1:i-1);
+    vPico = vPico(1:i-1);
+
+
+
 %% Disconnect pico
 dataLogger.setDTR(false); % this line allows matlab to break connection without waiting for pico
                           % to respond in a way the pico  isn't looking
