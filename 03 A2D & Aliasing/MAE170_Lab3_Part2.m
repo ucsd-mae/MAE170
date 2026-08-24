@@ -13,6 +13,7 @@ Vmax = 5.1; % maximum Y value to graph
 
 s = serialport("COMX",115200); % Replace COMX with your pico's COM port
 flush(s); % Clear buffers on serial object
+readline(s); % Read 1 line so we guarantee the buffer starts on a clean line
  
 %% Main code
 figure(01); % setup figure 01

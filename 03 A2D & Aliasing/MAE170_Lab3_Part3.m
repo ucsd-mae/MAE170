@@ -9,6 +9,7 @@ dataLogger=serialport("COMX",115200); %Connect to pico, replace COM_NAME with CO
 
 pause(1);
 dataLogger.flush();
+readline(dataLogger); % read 1 line so that we start on a clean line
 
 %% Read oscilloscope data
 [vOscope,tOscope]=oscread();
