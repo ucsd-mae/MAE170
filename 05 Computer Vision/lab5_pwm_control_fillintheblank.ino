@@ -29,7 +29,9 @@ void setPWM(float lastVoltage){
   // YOUR CODE GOES HERE
     // hint: set PWM output to motorPin with analogWrite, which accepts int between 0-255
     //       do you need to scale your lastVoltage value to map onto a 0-255 range?
-
+    
+  // store the value you send to the pwmPin in the global variable pwmValue 
+  // that way your value printed in the output loop
   pwmValue = 0;
   // --------------------
   // no need to return anything (function type is void)
