@@ -2,9 +2,10 @@
 // the state machine has been defined for you
 // fill in the blanks to make it work
 
-const uint adcPin = 15;
-const uint motorPin = 16;
+const uint adcPin = A0;
+const uint pwmPin = 15;
 const uint adcResolution = 10;
+const uint pwmResolution = 8;
 const float adcVoltage = 3.3;
 
 uint motorEnable = 0;
@@ -17,11 +18,10 @@ float readADC(uint adcPin){
   // --------------------
   // YOUR CODE GOES HERE
     // hint: analogRead()?
-  
   float lastVoltage = 0;
-  
+
   // --------------------
-  return lastVoltage
+  return lastVoltage;
 }
 
 void setPWM(float lastVoltage){
@@ -30,20 +30,20 @@ void setPWM(float lastVoltage){
     // hint: set PWM output to motorPin with analogWrite, which accepts int between 0-255
     //       do you need to scale your lastVoltage value to map onto a 0-255 range?
 
-  pwmValue = 0;// store the PWM setting in pwmValue so the print statements give you feedback in loop()
-
+  pwmValue = 0;
   // --------------------
   // no need to return anything (function type is void)
 }
 
 void setup() {
   analogReadResolution(adcResolution); // set pico to specified ADC resolution
+  analogWriteResolution(pwmResolution);// set pwm to specified resolution-default is 8 bit
   Serial.begin(); 
   while(!Serial){
     // wait for serial (USB CDC) connection to be opened on computer
   }
 
-  pinMode(motorPin, OUTPUT);
+  pinMode(pwmPin, OUTPUT);
   pinMode(adcPin, INPUT);
   Serial.print("PWM Motor Control via Potentiometer. Set PWM duty cycle with potentiometer. ");
   Serial.print("Send \"1\" via Serial to enable motor. Send \"0\" to stop motor.\n\n");
@@ -80,7 +80,7 @@ void loop() {
     Serial.print("motorEnable value: "); Serial.println(motorEnable);
   }
   // if motor is on, set PWM output to current potentiometer %
-  if motorEnable{
+  if (motorEnable){
     setPWM(readADC(adcPin)); // read adcPin and set PWM
   }
   else {
