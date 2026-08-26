@@ -47,12 +47,12 @@ end
 oscObj = visadev(list{j,1});
 
 % [EDIT THE FOLLOWING PARAMETERS BASED ON THE LAB PROCEDURE]
-verticalscale1 = .050; % channel 1 vertical scale [V]
+verticalscale1 = 1.00; % channel 1 vertical scale [V]
 verticalscale2 = .020; % channel 2 vertical scale [V]
 timebase = 0.0005; % specified timescale [s]
 time_offset = .002; % specified time offset [s]
 
-verticaloffset1 = 0; % channel 1 vertical offset [V]
+verticaloffset1 = -1.0; % channel 1 vertical offset [V]
 verticaloffset2 = 0; % channel 2 vertical offset [V]
 
 % set oscilloscope properties
