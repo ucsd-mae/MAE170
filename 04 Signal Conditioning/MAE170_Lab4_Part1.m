@@ -5,7 +5,7 @@ clc;
 %% Parameters to set
 T = 2; % Total sampling time in seconds
 fs = 5000; % sampling frequency target in Hz
-cutFreq = 1/(2*pi* 1e-6 *10.085e3); % insert your calculated cutoff frequency here
+cutFreq = ; % insert your calculated cutoff frequency here
 f_min=1; % minimum frequency to be characterized in Hz
 f_max=2*cutFreq; % maximum frequency to be characterized in Hz
 f_step=1; % frequency step in Hz
