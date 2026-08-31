@@ -10,33 +10,33 @@ opamp_gain = 100;
 
 %% Your measurements go here
 % be sure to use SI units
-L = ____/1000; % length of beam in meters
-x = ____/1000; % location of strain gauge in meters
+L = ___/1000; % length of beam in meters
+x = ___/1000; % location of strain gauge in meters
 
 %        [m1 m2 m3 m4 m5]
 masses = [__ __ __ __ __]; % should be in kg
 %             [y1 y2 y3 y4 y5]
-deflections = [__ __ __ __ __]; % should be in m
+deflections =  [__ __ __ __ __]; % should be in m
 %
-Vex = ____; % Measure Vex in volts
+Vex = ___; % Measure Vex in volts
 %       [V1 V2 V3 V4 V5]
-deltaVout =  [__ __ __ __ __]; % Vout in volts
+deltaVout =   [__ __ __ __ __]; % deltaVout in volts
 
 
 %% Functions for Calculating Strain, Deflection, and Change in Resistance
 function strain_from_theory = predictStrain(mass, momentInertia, E, L, x, y)
     % -----------------calculate strain from known values------------------
-    strain_from_theory = _________;% < your equation here
+    strain_from_theory =______;% < your equation here
 end
 
 function deflection_from_theory = predictDeflection(mass, momentInertia, E, L, x)
      % -----------------calculate deflection from known values-------------
-    deflection_from_theory = _________; % < your equation here
+    deflection_from_theory = _____; % < your equation here
 end
 
 function deltaRoverR = calculateDeltaRratio(deltaVout, Vex, Gain)
     % ---------calculate change in resistance ratio from known values------
-    deltaRoverR = _________;% < your equation here
+    deltaRoverR = ______;% < your equation here
 end
 
 %% Calculate Strain and Predicted Deflection
@@ -46,6 +46,7 @@ deflection_theory = predictDeflection(masses, momentInertia, E, L, L);
 
 %% plot strain vs deltaR/R
 figure;
+subplot(2, 1, 1);
 hold on;
 % covert voltage measurements to resistance ratio
 deltaRoverR = calculateDeltaRratio(deltaVout, Vex, opamp_gain);
@@ -59,24 +60,24 @@ ys = lineOfBestFit(1) * xs + lineOfBestFit(2);
 plot(xs, ys, "--");
 legend("Strain vs. measured change in resistance", "Linear Regression")
 % nicely format calculated values and report on plot
-lineOfBestFitString = sprintf("$\\epsilon = %.4f \\cdot \\Delta R / R + %.2f $", lineOfBestFit(1), lineOfBestFit(2));
-dim1 = [.2 .7 .1 .1];
+lineOfBestFitString = sprintf("Linear Regression Result:\n$\\epsilon = %.4f \\cdot \\Delta R / R + %.2f $", lineOfBestFit(1), lineOfBestFit(2));
+dim = [.2 .7 .1 .1];
 annotation("textbox", dim, "String",lineOfBestFitString, "Interpreter","latex",'FitBoxToText','on');
 
 xlabel("$\Delta R / R$", "Interpreter","latex");
 ylabel("$\epsilon$ $\left(\frac{\Delta l}{ l}\right)$", "Interpreter","latex");
-title("Calculating Gauge Factor")
+title("Calculating Gauge Factor From Measured Change In Resistance With Applied Stress")
 hold off;
 
 %% plot predicted and measured deflection
-figure;
+subplot(2, 1, 2);
 hold on;
 % calculate force from masses used.
 forces = masses * 9.81; % force in N
-plot(forces, deflections, "-o");
-plot(forces, deflection_theory, "-o");
+plot(forces, deflections*1000, "-o");
+plot(forces, deflection_theory*1000, "-o");
 legend("Measured deflection", "Predicted Deflection", "location", "southeast");
 xlabel("Force (N)");
-ylabel("Deflection (m)");
+ylabel("Deflection (mm)");
 title("Comparing Predicted Deflection and Measured Deflection");
 hold off;
