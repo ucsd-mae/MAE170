@@ -87,7 +87,7 @@ angle_sign=cross(zerovector,pointvector);
 % Check what the sign of the angle should be resulting from the next calculation  
 angle=sign(angle_sign(3))*atan2(norm(cross(zerovector,pointvector)),dot(zerovector,pointvector)); 
 % Calculate the angle in radians
-angled=angle*180/pi  % Convert to degrees
+angled=angle*180/pi + 180  % Convert to degrees, shift phase +180 so values are in domain [0,360]
 
 %% Loop through all the frames
 for k=1:frames
@@ -141,7 +141,7 @@ for k=1:frames
     pointvector=[rotatingpoint.center(1,:)-centerpoint.center, 0];
     angle_sign=cross(zerovector,pointvector);
     angle=sign(angle_sign(3))*atan2(norm(cross(zerovector,pointvector)),dot(zerovector,pointvector));
-    angle_degrees=angle*180/pi
+    angle_degrees=angle*180/pi + 180
     angled(k)=angle_degrees;
     if mod(k,10)==0 % display every 10 frames to the command line
         k
@@ -149,5 +149,3 @@ for k=1:frames
     pause(0.2); % pause for 200 ms for each frame to allow time for plotting
 
 end
-%shift measured angles to be from 0 to 360 instead of -180 to 180 degrees
-angled=angled+180;

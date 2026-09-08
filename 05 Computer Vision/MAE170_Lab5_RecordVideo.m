@@ -24,7 +24,7 @@ s = serialport("COMX",9600); % open object for your arduino
  
 pause(5); % pause for 5 seconds while the serial object is opened
  
-writeline(s,'255'); % write motor driving speed
+writeline(s,'1'); % write motor output enable to ON (=1)
  
 for i = 1:frames % Create a loop to acquire each frame
     img = snapshot(cam);

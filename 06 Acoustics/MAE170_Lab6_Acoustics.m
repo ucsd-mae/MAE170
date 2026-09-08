@@ -15,11 +15,11 @@ TmShort=1; % move time short [s]
 
 % [EDIT THESE COM PORT VALUES]
 s_speaker = serialport("COMX",115200); % Serialport connection
-% create serial object for speaker Arduino
+% create serial object for speaker control via Pi Pico
 s_move = serialport("COMX",115200);
 % create serial object for Rambo Arduino
 
-disp('Connecting to Arduino & RAMBo...')
+disp('Connecting to Pico & RAMBo...')
 pause(3); %initial pause for Rambo
 disp('Connected!')
 
@@ -47,12 +47,12 @@ end
 oscObj = visadev(list{j,1});
 
 % [EDIT THE FOLLOWING PARAMETERS BASED ON THE LAB PROCEDURE]
-verticalscale1 = .050; % channel 1 vertical scale [V]
+verticalscale1 = 1.00; % channel 1 vertical scale [V]
 verticalscale2 = .020; % channel 2 vertical scale [V]
 timebase = 0.0005; % specified timescale [s]
 time_offset = .002; % specified time offset [s]
 
-verticaloffset1 = 0; % channel 1 vertical offset [V]
+verticaloffset1 = -1.0; % channel 1 vertical offset [V]
 verticaloffset2 = 0; % channel 2 vertical offset [V]
 
 % set oscilloscope properties
