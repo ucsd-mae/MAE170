@@ -8,8 +8,6 @@ sampleT=1;%Set sampling time in seconds
 dataLogger=serialport("COMX",115200); %Connect to pico, replace COM_NAME with COM port
 
 pause(1);
-dataLogger.flush();
-readline(dataLogger); % read 1 line so that we start on a clean line
 
 %% Read oscilloscope data
 [vOscope,tOscope]=oscread();
@@ -31,6 +29,8 @@ vPico=zeros(L,1); % initialize amplitude vector
     % parse every complete line in that chunk in one sscanf() call.
     leftover = '';       % holds any partial (incomplete) line between reads
 
+    dataLogger.flush();
+    readline(dataLogger); % read 1 line so that we start on a clean line
     while flag == 0
         nbytes = dataLogger.NumBytesAvailable;
         if nbytes == 0
