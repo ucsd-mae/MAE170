@@ -1,6 +1,7 @@
+clear; % just clear any previous runs
 %% Parameters to set
 T = 5; % Total sampling time in seconds
-fs = 10000; % Hz
+fs = 100; % Hz
 Vmin = -0.01; % minimum Y value to graph
 Vmax = 5.1; % maximum Y value to graph
  
@@ -12,9 +13,7 @@ Vmax = 5.1; % maximum Y value to graph
 % port_num = serialportlist; % Creates a list of active serial ports
 
 s = serialport("COMX",115200); % Replace COMX with your pico's COM port
-flush(s); % Clear buffers on serial object
-readline(s); % Read 1 line so we guarantee the buffer starts on a clean line
- 
+
 %% Main code
 figure(01); % setup figure 01
 
@@ -62,6 +61,8 @@ tic;
     plot_dt = 0.05;        % only redraw the plot ~20 times/sec (not every sample)
     last_plot = 0;
     tic; % re-start timer to use for plot throttling
+    flush(s); % Clear buffers on serial object
+    readline(s); % Read 1 line so we guarantee the buffer starts on a clean line
     while flag == 0
         nbytes = s.NumBytesAvailable;
         if nbytes == 0
