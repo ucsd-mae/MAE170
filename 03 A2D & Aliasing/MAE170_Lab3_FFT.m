@@ -39,12 +39,14 @@ function [frequencyVar, amplitudeVar] = MAE170fft(tVar, yVar)
     % calculate oscilloscope signal PSD
     PSD = nufft(yVar, tVar*fs);
     % look at all frequencies up to nyquist frequency
-    frequencyVar = (0:floor(reps/2) - 1)/reps * fs;
-    amplitudeVar = abs(PSD(1:floor(reps/2))); 
-    % fold the frequencies from the nyquist frequency up to the end over
-    % onto the lower frequency space.
+    frequencyVar = (0:floor(reps/2) + 1)/reps * fs;
+    amplitudeVar = abs(PSD(1:floor(reps/2)+2)); % confusing need to add 2 due to matlab's 1-based indexing 
+    % double the amplitude of all values except for 0 and nyquist
+    % frequencies
+    % so that power is conserved.
     % this is analagous to using a 'onesided' frequency range in the
     % periodogram function 
-    % https://www.mathworks.com/help/signal/ref/periodogram.html#mw_f2a46c4b-836f-4aca-9c1d-a9066d72b2b8
+    % https://www.mathworks.com/help/signal/ref/periodogram.html#btuc2ow-1
     amplitudeVar = amplitudeVar + flip(paddata(abs((PSD(floor(reps/2)+2:end))), length(amplitudeVar)));
 end
+

@@ -1,5 +1,5 @@
  %% Parameters to set
-sampleT=1;%Set sampling time in seconds
+sampleT=0.25;%Set sampling time in seconds
  
 % create the serial object 'dataLogger'
 % you must replace the port name with the port on your machine
@@ -7,7 +7,7 @@ sampleT=1;%Set sampling time in seconds
 
 dataLogger=serialport("COMX",115200); %Connect to pico, replace COM_NAME with COM port
 
-pause(1);
+pause(0.25);
 
 %% Read oscilloscope data
 [vOscope,tOscope]=oscread();
@@ -83,14 +83,20 @@ dataLogger.setDTR(false); % this line allows matlab to break connection without 
                           % for.
 clear dataLogger; % delete dataLogger variable so you can use the com port again
 disp('Part 3 Capture complete')
+
 %% Save data
 filename = sprintf('FREQUENCYHERE_lab3_part3_%s',datetime('now','Format',"yyyy-MM-dd-HH-mm-ss"));
 save([filename, '.mat']); % saves the whole workspace
 
 
 
-%% may need to use tmtool to scan for oscilloscope resource
+%% Extended memory oscope capture
 function [wave,time] = oscread()
+    %% Config
+    chan        = 1;
+    memDepth    = "NORMal";     % "NORMal" or "LONG"
+    readTimeout = 3;         % s
+    
     list = visadevlist;
     for i=1:height(list)
         c = char(list{i,1});
@@ -98,20 +104,28 @@ function [wave,time] = oscread()
             j = i;
         end
     end
-        
-    % set oscilloscope visa object
-    oscObj = visadev(list{j,1}); 
-     
-    writeline(oscObj,':wav:data?'); % query for data from channel 1
-    data = read(oscObj,610); % read data from oscilloscope
-    len = length(data);
-    timebase = str2double(writeread(oscObj,':TIMebase:SCALe?')); % get timebase
-    verticalscale = str2double(writeread(oscObj,':CHANnel1:SCALe?')); % get vertical scale
-    verticaloffset = str2double(writeread(oscObj,':CHANnel1:OFFSet?')); % get vertical offset
-    wave=(125-data(12:len-1))*verticalscale/25+verticaloffset;
-     
-    T=timebase*12; % calculate total time
-    dt=T/length(wave); % calculate time step
-    time=[0:dt:T-dt]; % setup time vector
+
+    oscObj = visadev(list{j,1});
+    oscObj.Timeout = readTimeout;
+    
+    writeline(oscObj, ":ACQuire:NORM");
+    writeline(oscObj, ":ACQuire:MEMDepth " + memDepth);   % set while running if the scope rejects it when stopped
+    writeline(oscObj, ":WAVeform:POINts:MODE RAW");
+    writeline(oscObj, ":STOP");
+    
+    flush(oscObj);
+    pause(0.25);
+    writeline(oscObj, ":WAVeform:DATA? CHANnel" + chan);
+    raw = read(oscObj, 3064);    
+
+    writeline(oscObj, ":RUN");
+    
+    % scaling: query the preamble-type values rather than assuming 25 codes/div
+    vscale  = str2double(writeread(oscObj, ":CHANnel"+chan+":SCALe?"));
+    voffset = str2double(writeread(oscObj, ":CHANnel"+chan+":OFFSet?"));
+    fs      = str2double(writeread(oscObj, ":ACQuire:SAMPlingrate? CHANnel"+chan)); 
+    
+    wave = ((125 - double(raw(64:end)))*vscale/25 - voffset).';       % check sign convention of offset against your screen
+    time = ((0:numel(wave)-1)/fs).';
     clear oscObj list; % clear oscilloscope object
 end
