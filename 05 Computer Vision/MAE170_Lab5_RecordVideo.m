@@ -7,7 +7,7 @@ workingDir = pwd; % set the working directory to the current directory
 frames = 200; % set the number of frames to record
  
 %% same as previous script
-cam=webcam(1); % selects the webcam
+cam=webcam(length(webcamlist)); % selects the webcam
 cam.Exposure=0; % sets camera exposure to default
 cam.Exposure=-2; % sets exposure time (more negative value results in a shorter exposure)
 cam.Gain=220; % set the internal amplification of the signal measured for each pixel

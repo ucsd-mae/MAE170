@@ -52,7 +52,7 @@ title('Cropped Binary Image with Identified Points');
 hold on % turn ‘hold’ on to allow additional plots to be overlayed on the binary plot
 rot_min = 15; % rotating point minimum pixel radius
 rot_max = 40; % rotating point maximum pixel radius
-ctr_min = 5; % center point mimimum pixel radius
+ctr_min = 5; % center point minimum pixel radius
 ctr_max = 10; % center point maximum pixel radius
 rot_sens = 0.94; % algorithm sensitivity to find rotating point
 ctr_sens = 0.95; % algorithm sensitivity to find center point
