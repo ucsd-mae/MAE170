@@ -26,7 +26,7 @@ float readADC(uint readPin){
   // --------------------
   // YOUR CODE GOES HERE
     // hint: analogRead()?
-    // hint: max ADC count = 2^adcResolution - 1 -> what's that as a float?
+    // hint: max ADC count = pow(2, adcResolution) - 1 -> what's that as a float?
 
   float lastVoltage = 0;
 
@@ -39,7 +39,7 @@ void setPWM(uint writePin, float lastVoltage){
   // YOUR CODE GOES HERE
   // store the value you send to the pwmPin in the global variable pwmValue
   // that way your value is visible in the output print statements
-    // hint: scale voltage to a pwm count. max PWM count = 2^pwmResolution - 1  
+    // hint: scale voltage to a pwm count. max PWM count = pow(2, pwmResolution) - 1  
   pwmValue = 0;
     // hint: analogWrite()?
   
